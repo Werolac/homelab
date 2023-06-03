@@ -3,3 +3,10 @@
     upgrade: yes
     update_cache: yes
     cache_valid_time: 86400
+  
+- name: check virtualization support 
+  ansible.builtin.shell:
+    cmd: egrep -c '(vmx|svm)' /proc/cpuinfo
+  register: virtualization_support
+  failed_when: " virtualization_support.stdout == '0' "
+
