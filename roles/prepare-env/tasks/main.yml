@@ -10,3 +10,20 @@
   register: virtualization_support
   failed_when: " virtualization_support.stdout == '0' "
 
+- name: install essential kvm packages
+  ansible.builtin.apt:
+    pkg:
+    - qemu-kvm
+    - libvirt-daemon-system
+    - libvirt-clients
+    - bridge-utils
+
+- name: add users to libvirt and kvm group
+  ansible.builtin.user:
+    name: lveroczki
+    groups: libvirt,kvm
+
+- name: ensure that libvirtd is running
+  ansible.builtin.systemd:
+    name: libvirtd
+    state: started
